@@ -1,5 +1,6 @@
 {
   "expo": {
+    "newArchEnabled": true,
     "name": "aloha-world",
     "slug": "aloha-world",
     "version": "1.0.0",
