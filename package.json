@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@expo/metro-runtime": "4.0.1",
-    "expo": "~52.0.32",
+    "expo": "^52.0.35",
     "expo-font": "13.0.3",
     "expo-status-bar": "2.0.1",
     "metro": "^0.81.0",
