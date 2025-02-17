@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import Titel from "./Titel";
 
 export default function HomeScreen() {
     const [data, setData] = useState(null);
@@ -42,7 +43,7 @@ export default function HomeScreen() {
 
     return (
       <View style={styles.container}>
-        <Text>Willkommen auf dem HomeScreen!</Text>
+        <Titel style={styles.titel}>PlantPlant</Titel>
         <Text style={styles.dataText}>Empfangene Zahl: {data?.number ?? 'Keine Daten'}</Text>
       </View>
     );
@@ -51,8 +52,13 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    position: 'relative',
+  },
+  titel: {
+    position: 'absolute',
+    top: 125,
   },
 });
-
