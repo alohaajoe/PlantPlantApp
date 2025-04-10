@@ -83,10 +83,10 @@ export default function HomeScreen() {
       {isLoading ? (
         <Text>Loading...</Text>
       ) : (
-        <>
+        <View style={styles.block}>
           <Image source={mapDataToHealthbar()} style={styles.heartBar} />
           <Text style={styles.dataText}>Empfangene Zahl: {data?.number ?? 'Keine Daten'}</Text>
-        </>
+        </View>
       )}
       {error && <Text style={styles.errorText}>Fehler: {error}</Text>}
     </View>
@@ -101,13 +101,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     position: 'relative',
   },
+  block: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'relative',
+    top: '4%',
+  },
   titel: {
     position: 'absolute',
     top: '20%',
   },
   heartBar: {
-    merginBottom: 50,
-    bottom: 50,
+    bottom: '3%',
   },
   dataText: {
     fontSize: 18,
