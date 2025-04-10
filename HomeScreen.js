@@ -84,7 +84,7 @@ export default function HomeScreen() {
         <Text>Loading...</Text>
       ) : (
         <>
-          <Image source={mapDataToHealthbar()} style={styles.heartImage} />
+          <Image source={mapDataToHealthbar()} style={styles.heartBar} />
           <Text style={styles.dataText}>Empfangene Zahl: {data?.number ?? 'Keine Daten'}</Text>
         </>
       )}
@@ -105,10 +105,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: '20%',
   },
-  heartImage: {
-    width: '14%',
-    aspectRatio: 55 / 51.77,
-    marginBottom: 20,
+  heartBar: {
+    merginBottom: 50,
+    bottom: 50,
   },
   dataText: {
     fontSize: 18,
