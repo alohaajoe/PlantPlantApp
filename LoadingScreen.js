@@ -27,7 +27,9 @@ const styles = StyleSheet.create({
       marginBottom: 20,
     },
     titel: {
-      top: -40, // y-Koordinate
+      //top: -40, // y-Koordinate
+      position: 'absolute',
+      top: '20%',
     },
   });
   
