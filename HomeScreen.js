@@ -20,7 +20,7 @@ export default function HomeScreen() {
 
   const fetchData = async () => {
     try {
-      const response = await fetch('http://192.168.178.38:8000/api', {
+      const response = await fetch('http://192.168.1.63:8000/now', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -29,9 +29,9 @@ export default function HomeScreen() {
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-      const data = await response.json();
-      console.log('Fetched data:', data);
-      setData(data);
+      const recieved_data = await response.json();
+      console.log('Fetched data:', recieved_data);
+      setData(recieved_data.last_message.value);
       setError(null);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -42,7 +42,7 @@ export default function HomeScreen() {
   };
 
   const mapDataToHealthbar = () => {
-    const number = data?.number;
+    const number = data;
     if (0 <= number && number < 10) {
       return HEALTH05_IMAGE;
     } else if (10 <= number && number < 20) {
@@ -70,7 +70,7 @@ export default function HomeScreen() {
     // Initialer Datenabruf
     fetchData();
     // Intervall für wiederholten Datenabruf
-    const intervalId = setInterval(fetchData, 10000); // 10000 ms = 10 Sekunden
+    const intervalId = setInterval(fetchData, 60000); // 10000 ms = 10 Sekunden
 
     // Cleanup-Funktion, um das Intervall zu löschen, wenn die Komponente unmontiert wird
     return () => clearInterval(intervalId);
@@ -85,7 +85,7 @@ export default function HomeScreen() {
       ) : (
         <View style={styles.block}>
           <Image source={mapDataToHealthbar()} style={styles.heartBar} />
-          <Text style={styles.dataText}>Empfangene Zahl: {data?.number ?? 'Keine Daten'}</Text>
+          <Text style={styles.dataText}>Empfangene Zahl: {data ?? 'Keine Daten'}</Text>
         </View>
       )}
       {error && <Text style={styles.errorText}>Fehler: {error}</Text>}
