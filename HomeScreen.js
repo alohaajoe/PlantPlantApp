@@ -20,7 +20,7 @@ export default function HomeScreen() {
 
   const fetchData = async () => {
     try {
-      const response = await fetch('http://192.168.1.63:8000/now', {
+      const response = await fetch('http://192.168.178.95:8000/now', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -43,7 +43,9 @@ export default function HomeScreen() {
 
   const mapDataToHealthbar = () => {
     const number = data;
-    if (0 <= number && number < 10) {
+    if (number === null || number === undefined) {
+      return;
+    } else if (0 <= number && number < 10) {
       return HEALTH05_IMAGE;
     } else if (10 <= number && number < 20) {
       return HEALTH1_IMAGE;
@@ -70,7 +72,7 @@ export default function HomeScreen() {
     // Initialer Datenabruf
     fetchData();
     // Intervall für wiederholten Datenabruf
-    const intervalId = setInterval(fetchData, 60000); // 10000 ms = 10 Sekunden
+    const intervalId = setInterval(fetchData, 10000); // 10000 ms = 10 Sekunden
 
     // Cleanup-Funktion, um das Intervall zu löschen, wenn die Komponente unmontiert wird
     return () => clearInterval(intervalId);
@@ -119,7 +121,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   errorText: {
-    marginTop: 20,
+    position: 'absolute',
+    bottom: '10%',
     color: 'red',
   },
 });
