@@ -119,6 +119,7 @@ const styles = StyleSheet.create({
   },
   dataText: {
     fontSize: 18,
+    color: '#22333B',
   },
   errorText: {
     position: 'absolute',

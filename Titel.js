@@ -25,6 +25,6 @@ const styles = StyleSheet.create({
   text: {
     fontFamily: 'Megrim',
     fontSize: 48, 
-    color: '#000000',
+    color: '#22333B',
   },
 });
