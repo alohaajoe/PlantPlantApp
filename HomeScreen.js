@@ -20,7 +20,7 @@ export default function HomeScreen() {
 
   const fetchData = async () => {
     try {
-      const response = await fetch('http://192.168.178.95:8000/now', {
+      const response = await fetch('http://192.168.2.135:8000/now', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -31,7 +31,7 @@ export default function HomeScreen() {
       }
       const recieved_data = await response.json();
       console.log('Fetched data:', recieved_data);
-      setData(recieved_data.last_message.value);
+      setData(recieved_data.messages[0].value);
       setError(null);
     } catch (error) {
       console.error('Error fetching data:', error);
