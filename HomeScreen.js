@@ -20,7 +20,7 @@ export default function HomeScreen() {
 
   const fetchData = async () => {
     try {
-      const response = await fetch('http://192.168.2.135:8000/now', {
+      const response = await fetch('http://localhost:8000/now', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
