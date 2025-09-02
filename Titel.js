@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Text, StyleSheet } from 'react-native';
 import * as Font from 'expo-font';
+import Colors from './assets/colors';
 
 export default function CustomText({ children, style }) {
     const [fontsLoaded, setFontsLoaded] = useState(false);
@@ -25,6 +26,6 @@ const styles = StyleSheet.create({
   text: {
     fontFamily: 'Megrim',
     fontSize: 48, 
-    color: '#22333B',
+    color: Colors.textDark,
   },
 });

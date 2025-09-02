@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
 import Titel from "./Titel";
+import Colors from './assets/colors';
 
 const PLANTPLANT_IMAGE = "./assets/plantie.png";
 
@@ -16,7 +17,7 @@ const LoadingScreen = () => {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#22333B',
+      backgroundColor: Colors.backgroundNavigation,
       alignItems: 'center',
       justifyContent: 'center',
       position: 'relative',
@@ -30,7 +31,7 @@ const styles = StyleSheet.create({
       //top: -40, // y-Koordinate
       position: 'absolute',
       top: '20%',
-      color: '#FFFFFF',
+      color: Colors.textLight,
     },
   });
   

@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import Titel from "./Titel";
+import Colors from './assets/colors';
 
 const value_address = ("http://plantpi:8000/now/value")
 const threshold_address = ("http://plantpi:8000/now/threshold")
@@ -83,7 +84,7 @@ export default function HomeScreen() {
     const queryInterval = setInterval(() => {
     fetchValueData();
     fetchThresholdData();
-  }, 60000);
+  }, (60000 * 30));
 
     // Cleanup-Funktion, um das Intervall zu löschen, wenn die Komponente unmontiert wird
     return () => clearInterval(queryInterval);
@@ -110,7 +111,7 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: Colors.background,
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
@@ -131,11 +132,11 @@ const styles = StyleSheet.create({
   },
   dataText: {
     fontSize: 18,
-    color: '#22333B',
+    color: Colors.textDark,
   },
   errorText: {
     position: 'absolute',
     bottom: '10%',
-    color: 'red',
+    color: Colors.error,
   },
 });
