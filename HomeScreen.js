@@ -47,10 +47,14 @@ export default function HomeScreen() {
 
   const mapDataToHealthbar = () => {
     if (value === null || threshold === null) return;
-
-    // Verhältnis Value * 1.5 zu Threshold damit mensch eher 5 Herzen sieht
-    let hearts = Math.round(((value * 1.5) / threshold) * 4) / 2;
-
+    
+    // Verhältnis Value * 1.3 zu Threshold damit mensch eher 5 Herzen sieht
+    if (value > threshold) {
+      var hearts = Math.round(((value * 1.3) / threshold) * 4) / 2;
+    }
+    else {
+      var hearts = Math.round((value / threshold) * 4) / 2;
+    }
     // Clamp zwischen 0 und 5
     hearts = Math.max(0, Math.min(5, hearts));
 
