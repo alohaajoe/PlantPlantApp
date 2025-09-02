@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import Titel from "./assets/Titel";
 import styles from './assets/globalStyels';
+import { useFocusEffect } from '@react-navigation/native';
 
 const value_address = ("http://plantpi:8000/now/value")
 const threshold_address = ("http://plantpi:8000/now/threshold")
@@ -28,22 +29,22 @@ const HomeScreen = () =>  {
 
 
   const fetchData = async (url, setter) => {
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const received = await response.json();
+      console.log('Fetched data:', received);
+      setter(received.message[0].value);
+      setError(null);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
     }
-    const received = await response.json();
-    console.log('Fetched data:', received);
-    setter(received.message[0].value);
-    setError(null);
-  } catch (error) {
-    console.error('Error fetching data:', error);
-    setError(error.message);
-  } finally {
-    setIsLoading(false);
-  }
-};
+  };
 
   const mapDataToHealthbar = () => {
     if (value === null || threshold === null) return;
@@ -72,22 +73,29 @@ const HomeScreen = () =>  {
       case 5:   return HEALTH5_IMAGE;
       default:  return HEALTH05_IMAGE;
     }
-  }
+  };
+
+  const fetchAllData = () => {
+    fetchValueData();
+    fetchThresholdData();
+  };
 
   useEffect(() => {
-    // Initialer Datenabruf
-    fetchValueData();
-    fetchThresholdData();
     // Intervall für wiederholten Datenabruf
     const queryInterval = setInterval(() => {
-    fetchValueData();
-    fetchThresholdData();
-  }, (60000 * 30));
+      fetchAllData();
+    }, (60000 * 30));
 
     // Cleanup-Funktion, um das Intervall zu löschen, wenn die Komponente unmontiert wird
     return () => clearInterval(queryInterval);
 
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchAllData();
+    }, [])
+  );
 
   return (
     <View style={styles.container}>

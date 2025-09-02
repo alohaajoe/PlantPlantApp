@@ -35,7 +35,7 @@ const App = () => {
     <NavigationContainer>
       <Tab.Navigator screenOptions={screenOptions}>
         <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Analyse" component={AnalyseScreen} />
+        <Tab.Screen name="Historie" component={AnalyseScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );
