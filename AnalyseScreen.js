@@ -1,6 +1,6 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import Titel from "./Titel";
+import { View } from 'react-native';
+import Titel from "./assets/Titel";
+import styles from './assets/globalStyels';
 
 const AnalyseScreen = () => {
     return (
@@ -9,17 +9,5 @@ const AnalyseScreen = () => {
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#fff',
-    },
-    text: {
-        fontSize: 24,
-    },
-});
 
 export default AnalyseScreen;

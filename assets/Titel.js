@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Text, StyleSheet } from 'react-native';
 import * as Font from 'expo-font';
-import Colors from './assets/colors';
+import Colors from './colors';
 
 export default function CustomText({ children, style }) {
     const [fontsLoaded, setFontsLoaded] = useState(false);
@@ -9,7 +9,7 @@ export default function CustomText({ children, style }) {
     useEffect(() => {
       const loadFonts = async () => {
         await Font.loadAsync({
-          'Megrim': require('./assets/fonts/Megrim-Regular.ttf'),
+          'Megrim': require('./fonts/Megrim-Regular.ttf'),
         });
         setFontsLoaded(true);
       };

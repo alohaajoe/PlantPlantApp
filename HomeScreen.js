@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
-import Titel from "./Titel";
-import Colors from './assets/colors';
+import Titel from "./assets/Titel";
+import styles from './assets/globalStyels';
 
 const value_address = ("http://plantpi:8000/now/value")
 const threshold_address = ("http://plantpi:8000/now/threshold")
@@ -17,7 +17,8 @@ const HEALTH4_IMAGE = require("./assets/healthbar/Health4.png");
 const HEALTH45_IMAGE = require("./assets/healthbar/Health45.png");
 const HEALTH5_IMAGE = require("./assets/healthbar/Health5.png");
 
-export default function HomeScreen() {
+const HomeScreen = () =>  {
+
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [value, setValue] = useState(null);
@@ -43,8 +44,6 @@ export default function HomeScreen() {
     setIsLoading(false);
   }
 };
-
-
 
   const mapDataToHealthbar = () => {
     if (value === null || threshold === null) return;
@@ -73,7 +72,6 @@ export default function HomeScreen() {
       case 5:   return HEALTH5_IMAGE;
       default:  return HEALTH05_IMAGE;
     }
-
   }
 
   useEffect(() => {
@@ -108,35 +106,4 @@ export default function HomeScreen() {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.background,
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'relative',
-  },
-  block: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'relative',
-    top: '4%',
-  },
-  titel: {
-    position: 'absolute',
-    top: '20%',
-  },
-  heartBar: {
-    bottom: '3%',
-  },
-  dataText: {
-    fontSize: 18,
-    color: Colors.textDark,
-  },
-  errorText: {
-    position: 'absolute',
-    bottom: '10%',
-    color: Colors.error,
-  },
-});
+export default HomeScreen;

@@ -10,7 +10,7 @@ import Colors from './assets/colors';
 
 const Tab = createBottomTabNavigator();
 
-export default function App() {
+const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const loadingTimeout = 3000;
 
@@ -39,7 +39,9 @@ export default function App() {
       </Tab.Navigator>
     </NavigationContainer>
   );
-}
+};
+
+export default App;
 
 const screenOptions = StyleSheet.create({
   headerShown: false,

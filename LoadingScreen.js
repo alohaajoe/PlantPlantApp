@@ -1,6 +1,5 @@
-import React from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
-import Titel from "./Titel";
+import { View, Image, StyleSheet } from "react-native";
+import Titel from "./assets/Titel";
 import Colors from './assets/colors';
 
 const PLANTPLANT_IMAGE = "./assets/plantie.png";
@@ -13,6 +12,8 @@ const LoadingScreen = () => {
         </View>
     );
 };
+
+export default LoadingScreen;
 
 const styles = StyleSheet.create({
     container: {
@@ -34,6 +35,4 @@ const styles = StyleSheet.create({
       color: Colors.textLight,
     },
   });
-  
-  export default LoadingScreen;
 
