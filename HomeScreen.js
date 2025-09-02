@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import Titel from "./Titel";
 
+const value_address = ("http://plantpi:8000/now/value")
+const threshold_address = ("http://plantpi:8000/now/threshold")
+
 const HEALTH05_IMAGE = require("./assets/healthbar/Health05.png");
 const HEALTH1_IMAGE = require("./assets/healthbar/Health1.png");
 const HEALTH15_IMAGE = require("./assets/healthbar/Health15.png");
@@ -14,68 +17,72 @@ const HEALTH45_IMAGE = require("./assets/healthbar/Health45.png");
 const HEALTH5_IMAGE = require("./assets/healthbar/Health5.png");
 
 export default function HomeScreen() {
-  const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [value, setValue] = useState(null);
+  const [threshold, setThreshold] = useState(null);
+  const fetchValueData = () => fetchData(value_address, setValue);
+  const fetchThresholdData = () => fetchData(threshold_address, setThreshold);
 
-  const fetchData = async () => {
-    try {
-      const response = await fetch('http://localhost:8000/now', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      const recieved_data = await response.json();
-      console.log('Fetched data:', recieved_data);
-      setData(recieved_data.messages[0].value);
-      setError(null);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      setError(error.message);
-    } finally {
-      setIsLoading(false);
+
+  const fetchData = async (url, setter) => {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
     }
-  };
+    const received = await response.json();
+    console.log('Fetched data:', received);
+    setter(received.message[0].value);
+    setError(null);
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    setError(error.message);
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+
 
   const mapDataToHealthbar = () => {
-    const number = data;
-    if (number === null || number === undefined) {
-      return;
-    } else if (0 <= number && number < 10) {
-      return HEALTH05_IMAGE;
-    } else if (10 <= number && number < 20) {
-      return HEALTH1_IMAGE;
-    } else if (20 <= number && number < 30) {
-      return HEALTH15_IMAGE;
-    } else if (30 <= number && number < 40) {
-      return HEALTH2_IMAGE;
-    } else if (40 <= number && number < 50) {
-      return HEALTH25_IMAGE;
-    } else if (50 <= number && number < 60) {
-      return HEALTH3_IMAGE;
-    } else if (60 <= number && number < 70) {
-      return HEALTH35_IMAGE;
-    } else if (70 <= number && number < 80) {
-      return HEALTH4_IMAGE;
-    } else if (80 <= number && number < 90) {
-      return HEALTH45_IMAGE;
-    } else if (90 <= number && number <= 100) {
-      return HEALTH5_IMAGE;
+    if (value === null || threshold === null) return;
+
+    // Verhältnis Value * 1.5 zu Threshold damit mensch eher 5 Herzen sieht
+    let hearts = Math.round(((value * 1.5) / threshold) * 4) / 2;
+
+    // Clamp zwischen 0 und 5
+    hearts = Math.max(0, Math.min(5, hearts));
+
+    switch (hearts) {
+      case 0:   return HEALTH05_IMAGE; // oder eigenes 0er Bild?
+      case 0.5: return HEALTH05_IMAGE;
+      case 1:   return HEALTH1_IMAGE;
+      case 1.5: return HEALTH15_IMAGE;
+      case 2:   return HEALTH2_IMAGE;
+      case 2.5: return HEALTH25_IMAGE;
+      case 3:   return HEALTH3_IMAGE;
+      case 3.5: return HEALTH35_IMAGE;
+      case 4:   return HEALTH4_IMAGE;
+      case 4.5: return HEALTH45_IMAGE;
+      case 5:   return HEALTH5_IMAGE;
+      default:  return HEALTH05_IMAGE;
     }
+
   }
 
   useEffect(() => {
     // Initialer Datenabruf
-    fetchData();
+    fetchValueData();
+    fetchThresholdData();
     // Intervall für wiederholten Datenabruf
-    const intervalId = setInterval(fetchData, 10000); // 10000 ms = 10 Sekunden
+    const queryInterval = setInterval(() => {
+    fetchValueData();
+    fetchThresholdData();
+  }, 60000);
 
     // Cleanup-Funktion, um das Intervall zu löschen, wenn die Komponente unmontiert wird
-    return () => clearInterval(intervalId);
+    return () => clearInterval(queryInterval);
 
   }, []);
 
@@ -87,7 +94,8 @@ export default function HomeScreen() {
       ) : (
         <View style={styles.block}>
           <Image source={mapDataToHealthbar()} style={styles.heartBar} />
-          <Text style={styles.dataText}>Empfangene Zahl: {data ?? 'Keine Daten'}</Text>
+          <Text style={styles.dataText}>Value: {value ?? 'Keine Daten'}</Text>
+          <Text style={styles.dataText}>Threshold: {threshold ?? 'Keine Daten'}</Text>
         </View>
       )}
       {error && <Text style={styles.errorText}>Fehler: {error}</Text>}
