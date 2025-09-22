@@ -3,7 +3,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { View } from 'react-native';
 import Titel from "./assets/Titel";
 import styles from './assets/globalStyels';
-import { VictoryChart, VictoryLine, VictoryScatter, VictoryAxis } from 'victory-native';
+
 
 const today_value_address = ("http://plantpi:8000/today/value")
 const today_threshold_address = ("http://plantpi:8000/today/threshold")
@@ -76,42 +76,12 @@ const AnalyseScreen = () => {
     .sort((a, b) => new Date(a.time) - new Date(b.time))
     .map(p => ({ x: formatTime(p.time), y: p.value }));
 
+  const xTicks = [0, 6, 12, 18, 24];
 
   return (
     <View style={styles.container}>
       <Titel style={styles.titel}>Historie</Titel>
-        <VictoryChart
-          domain={{ x: [0, 24], y: [0, 100] }} // Feste Y-Achsen-Grenzen
-        >
-          <VictoryAxis
-            tickValues={[0, 6, 12, 18, 24]}
-            tickFormat={(t) => `${t}h`}
-          />
-          <VictoryAxis dependentAxis />
-          {/* Serie 1 */}
-          <VictoryLine
-            data={toXY(value)}
-            interpolation="monotoneX"
-            style={{ data: { stroke: '#4A90E2' } }}
-          />
-          <VictoryScatter
-            data={toXY(value)}
-            size={3}
-            style={{ data: { fill: '#4A90E2' } }}
-          />
 
-          {/* Serie 2 */}
-          <VictoryLine
-            data={toXY(threshold)}
-            interpolation="monotoneX"
-            style={{ data: { stroke: '#E94E77' } }}
-          />
-          <VictoryScatter
-            data={toXY(threshold)}
-            size={3}
-            style={{ data: { fill: '#E94E77' } }}
-          />
-        </VictoryChart>
     </View>
   );
 };
