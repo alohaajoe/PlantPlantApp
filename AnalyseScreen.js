@@ -3,7 +3,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { View } from 'react-native';
 import Titel from "./assets/Titel";
 import styles from './assets/globalStyels';
-import { LineChart } from "react-native-gifted-charts";
+import { VictoryChart, VictoryLine, VictoryScatter, VictoryAxis, VictoryTheme } from 'victory-native';
 
 const today_value_address = ("http://plantpi:8000/today/value")
 const today_threshold_address = ("http://plantpi:8000/today/threshold")
@@ -64,38 +64,55 @@ const AnalyseScreen = () => {
         }, [])
     );
 
-  // Feste X-Achsen-Beschriftung (0h–24h)
-  const xAxisLabelTexts = ['0h', '6h', '12h', '18h', '24h'];
-
 
   const formatTime = (iso) => {
     const d = new Date(iso);
-    return `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+    return d.getHours() + d.getMinutes() / 60;
   };
   
-  const toChartData = (arr) =>
-  arr.map((p) => ({
-    value: p.value,
-  }));
+  const toXY = (arr) =>
+  [...arr]
+    .filter(p => p.time && typeof p.value === 'number')
+    .sort((a, b) => new Date(a.time) - new Date(b.time))
+    .map(p => ({ x: formatTime(p.time), y: p.value }));
 
 
   return (
     <View style={styles.container}>
       <Titel style={styles.titel}>Historie</Titel>
-        <LineChart 
-          areaChart
-          curved
-          maxValue={100} // Y-Achse bleibt 0 - 100
-          yAxisLabelWidth={30}
-          yAxisTextStyle={{ fontSize: 12 }}
-          xAxisLabelTextStyle={{ fontSize: 12 }}
-          data={toChartData(value)}
-          data2={toChartData(threshold)}
-          color1="#4A90E2"
-          color2="#E94E77"
-          // Zeitachse fix von 0 bis 24
-          xAxisLabelTexts={xAxisLabelTexts}
-        />
+        <VictoryChart
+          theme={VictoryTheme.material}
+          domain={{ x: [0, 24], y: [0, 100] }} // Feste Y-Achsen-Grenzen
+        >
+          <VictoryAxis
+            tickValues={[0, 6, 12, 18, 24]}
+            tickFormat={(t) => `${t}h`}
+          />
+          <VictoryAxis dependentAxis />
+          {/* Serie 1 */}
+          <VictoryLine
+            data={toXY(value)}
+            interpolation="monotoneX"
+            style={{ data: { stroke: '#4A90E2' } }}
+          />
+          <VictoryScatter
+            data={toXY(value)}
+            size={3}
+            style={{ data: { fill: '#4A90E2' } }}
+          />
+
+          {/* Serie 2 */}
+          <VictoryLine
+            data={toXY(threshold)}
+            interpolation="monotoneX"
+            style={{ data: { stroke: '#E94E77' } }}
+          />
+          <VictoryScatter
+            data={toXY(threshold)}
+            size={3}
+            style={{ data: { fill: '#E94E77' } }}
+          />
+        </VictoryChart>
     </View>
   );
 };
