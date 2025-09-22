@@ -3,7 +3,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { View } from 'react-native';
 import Titel from "./assets/Titel";
 import styles from './assets/globalStyels';
-import { VictoryChart, VictoryLine, VictoryScatter, VictoryAxis, VictoryTheme } from 'victory-native';
+import { VictoryChart, VictoryLine, VictoryScatter, VictoryAxis } from 'victory-native';
 
 const today_value_address = ("http://plantpi:8000/today/value")
 const today_threshold_address = ("http://plantpi:8000/today/threshold")
@@ -81,7 +81,6 @@ const AnalyseScreen = () => {
     <View style={styles.container}>
       <Titel style={styles.titel}>Historie</Titel>
         <VictoryChart
-          theme={VictoryTheme.material}
           domain={{ x: [0, 24], y: [0, 100] }} // Feste Y-Achsen-Grenzen
         >
           <VictoryAxis
