@@ -3,6 +3,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { View } from 'react-native';
 import Titel from "./assets/Titel";
 import styles from './assets/globalStyels';
+import { LineChart } from "react-native-gifted-charts";
 
 const today_value_address = ("http://plantpi:8000/today/value")
 const today_threshold_address = ("http://plantpi:8000/today/threshold")
@@ -56,10 +57,19 @@ const AnalyseScreen = () => {
         }, [])
     );
 
+    const convertDataToChartFormat = (data) => {
+    }
 
     return (
         <View style={styles.container}>
             <Titel style={styles.titel}>Historie</Titel>
+            <LineChart areaChart curved
+                data={[
+                    { value: 50, label: '1h' },
+                    { value: 80, label: '2h' },
+                    { value: 90, label: '3h' },
+                ]}
+            />
         </View>
     );
 };
