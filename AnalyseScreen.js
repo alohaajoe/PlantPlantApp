@@ -31,7 +31,7 @@ const AnalyseScreen = () => {
         // Nur Value und Zeit extrahieren
         const items = (received.messages ?? []).map(({ value, timestamp }) => ({
           value,
-          time: timestamp
+          time: timestamp.split("T")[1].split(".")[0]
         }));
 
         setter(items);
@@ -71,14 +71,7 @@ const AnalyseScreen = () => {
     const d = new Date(iso);
     return d.getHours() + d.getMinutes() / 60;
   };
-  
-  const toXY = (arr) =>
-  [...arr]
-    .filter(p => p.time && typeof p.value === 'number')
-    .sort((a, b) => new Date(a.time) - new Date(b.time))
-    .map(p => ({ x: formatTime(p.time), y: p.value }));
 
-  const xTicks = [0, 6, 12, 18, 24];
 
   return (
     <View style={styles.container}>
