@@ -5,8 +5,10 @@ import Titel from "./assets/Titel";
 import styles from './assets/globalStyels';
 
 
-const today_value_address = ("http://plantpi:8000/today/value")
-const today_threshold_address = ("http://plantpi:8000/today/threshold")
+//const today_value_address = ("http://plantpi:8000/today/value")
+//const today_threshold_address = ("http://plantpi:8000/today/threshold")
+const today_value_address = ("http://localhost:8000/today/value")
+const today_threshold_address = ("http://localhost:8000/today/threshold")
 
 const AnalyseScreen = () => {
 
