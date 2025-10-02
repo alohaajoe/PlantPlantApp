@@ -6,16 +6,21 @@ import styles from './assets/globalStyels';
 import { Circle, LinearGradient, useFont, vec,} from "@shopify/react-native-skia";
 import { useDerivedValue, type SharedValue } from "react-native-reanimated";
 import { Area, CartesianChart, Line, useChartPressState } from "victory-native";
-
 import { Text as SKText } from "@shopify/react-native-skia";
-
+import Colors from './assets/colors';
 
 //const today_value_address = ("http://plantpi:8000/today/value")
 //const today_threshold_address = ("http://plantpi:8000/today/threshold")
 const today_value_address = ("http://localhost:8000/today/value")
 const today_threshold_address = ("http://localhost:8000/today/threshold")
 
+const chartfont = require("./assets/fonts/Megrim-Regular.ttf");
+
 const AnalyseScreen = () => {
+
+    const font = useFont(chartfont, 14);
+    const labelColor = Colors.textDark;
+    const lineColor = Colors.chartLines;
 
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -80,9 +85,9 @@ const AnalyseScreen = () => {
       width: "90%", 
       height: 300, 
       padding: 16, 
-      backgroundColor: "white", 
+      backgroundColor: Colors.background, 
       borderRadius: 12,
-      shadowColor: "#000",
+      shadowColor: Colors.dark,
       shadowOpacity: 0.1,
       shadowOffset: { width: 0, height: 2 },
       shadowRadius: 4,
@@ -94,13 +99,24 @@ const AnalyseScreen = () => {
           data={valueData}
           xKey={"time"}
           yKeys={["value"]}
+          domain={{ x: [0, 24] }}
           domainPadding={{ top: 30 }}
+          axisOptions={{
+            font,
+            labelColor,
+            lineColor,
+            xAxis: {
+              tickValues: Array.from({ length: 25 }, (_, i) => i), // 0..24
+              labelFormatter: (v) => `${v}h`,
+              tickCount: 25,
+            },
+          }}
         >
           {({ points }) => (
             <Line
               points={points.value}
               color={"black"}
-              strokeWidth={3}
+              strokeWidth={2}
               animate={{ type: "timing", duration: 2000 }}
             />
           )}

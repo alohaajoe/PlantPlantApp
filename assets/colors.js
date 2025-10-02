@@ -11,5 +11,7 @@ export default {
   textDark: "#22333B",
   textLight: "#FFFFFF",
 
+  chartLines: "#E0E0E0",
+
   error: "red",
 };
