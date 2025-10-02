@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
-import { View } from 'react-native';
+import { View, Button } from 'react-native';
 import Titel from "./assets/Titel";
 import styles from './assets/globalStyels';
 import {LinearGradient, useFont, vec,} from "@shopify/react-native-skia";
@@ -11,11 +11,14 @@ import Colors from './assets/colors';
 //const today_threshold_address = ("http://plantpi:8000/today/threshold")
 const today_value_address = ("http://localhost:8000/today/value")
 const today_threshold_address = ("http://localhost:8000/today/threshold")
+const week_value_address = ("http://localhost:8000/week/value")
+const week_threshold_address = ("http://localhost:8000/week/threshold")
 
 const chartfont = require("./assets/fonts/Megrim-Regular.ttf");
 
 const AnalyseScreen = () => {
 
+    const [week, setWeek] = useState(false);
     const font = useFont(chartfont, 14);
     const labelColor = Colors.textDark;
     const lineColor = Colors.chartLines;
@@ -24,8 +27,12 @@ const AnalyseScreen = () => {
     const [error, setError] = useState(null);
     const [valueData, setValueData] = useState([]);
     const [thresholdData, setThresholdData] = useState([]);
-    const fetchValueData = () => fetchData(today_value_address, setValueData);
-    const fetchThresholdData = () => fetchData(today_threshold_address, setThresholdData);
+
+    const value_address = week ? week_value_address : today_value_address;
+    const threshold_address = week ? week_threshold_address : today_threshold_address;
+
+    const fetchValueData = () => fetchData(value_address, setValueData);
+    const fetchThresholdData = () => fetchData(threshold_address, setThresholdData);
 
     const fetchData = async (url, setter) => {
       try {
@@ -37,9 +44,11 @@ const AnalyseScreen = () => {
         //console.log('Fetched data:', received);
 
         // Nur Value und Zeit extrahieren
-        const items = (received.messages ?? []).map(({ value, timestamp }) => ({
+                const items = (received.messages ?? []).map(({ value, timestamp }) => ({
           value,
-          time: new Date(timestamp).getHours() + new Date(timestamp).getMinutes() / 60 + new Date(timestamp).getSeconds() / 3600, 
+          time: !week
+            ? new Date(timestamp).getHours() + new Date(timestamp).getMinutes() / 60 + new Date(timestamp).getSeconds() / 3600
+            : new Date(timestamp).getDay() + new Date(timestamp).getHours() / 24 + new Date(timestamp).getMinutes() / 1440 + new Date(timestamp).getSeconds() / 86400,
         }));
 
         setter(items);
@@ -73,12 +82,12 @@ const AnalyseScreen = () => {
       // Cleanup-Funktion, um das Intervall zu löschen, wenn die Komponente unmontiert wird
       return () => clearInterval(queryInterval);
   
-    }, []);
+    }, [week]);
   
     useFocusEffect(
         useCallback(() => {
         fetchAllData();
-        }, [])
+        }, [week])
     );
 
 
@@ -97,23 +106,23 @@ const AnalyseScreen = () => {
       shadowOffset: { width: 0, height: 2 },
       shadowRadius: 4,
       elevation: 3, // für Android
-      marginTop: 20,
+      marginTop: 50,
     }}
       >
         <CartesianChart
           data={combinedData}
           xKey={"time"}
           yKeys={["value", "threshold"]}
-          domain={{ x: [0, 24] }}
+          domain={{ x: !week ? [0, 24] : [0, 7] }}
           domainPadding={{ top: 30 }}
           axisOptions={{
             font,
             labelColor,
             lineColor,
             xAxis: {
-              tickValues: Array.from({ length: 25 }, (_, i) => i), // 0..24
-              labelFormatter: (v) => `${v}h`,
-              tickCount: 25,
+              tickValues: Array.from({ length: !week ? 25 : 8 }, (_, i) => i), // 0..24 or 0..7
+              labelFormatter: (v) => (!week ? `${v}h` : `Tag ${v}`),
+              tickCount: !week ? 25 : 8,
             },
           }}
         >
@@ -148,6 +157,18 @@ const AnalyseScreen = () => {
             );
           }}
         </CartesianChart>
+      </View>
+      <View style={{top: 40, justifyContent: 'space-around', width: '60%'}}>
+        <Button 
+        title='Refresh' 
+        onPress={fetchAllData} 
+        color={Colors.green} 
+        />
+        <Button
+          title={week ? "Zeige den Tag" : "Zeige die Woche"}
+          onPress={() => setWeek(prev => !prev)}
+          color={Colors.dark}
+        />
       </View>
     </View>
   );

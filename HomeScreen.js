@@ -1,8 +1,9 @@
 import { useEffect, useState, useCallback } from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, Button } from 'react-native';
 import Titel from "./assets/Titel";
 import styles from './assets/globalStyels';
 import { useFocusEffect } from '@react-navigation/native';
+import Colors from './assets/colors';
 
 //const value_address = ("http://plantpi:8000/now/value")
 //const threshold_address = ("http://plantpi:8000/now/threshold")
@@ -109,6 +110,9 @@ const HomeScreen = () =>  {
           <Image source={mapDataToHealthbar()} style={styles.heartBar} />
           <Text style={styles.dataText}>Value: {value ?? 'Keine Daten'}</Text>
           <Text style={styles.dataText}>Threshold: {threshold ?? 'Keine Daten'}</Text>
+          <View style={{top: 20, justifyContent: 'space-around', width: '60%'}}>
+            <Button title='Refresh' onPress={fetchAllData} color={Colors.green} />
+          </View>
         </View>
       )}
       {error && <Text style={styles.errorText}>Fehler: {error}</Text>}
