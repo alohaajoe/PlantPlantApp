@@ -3,6 +3,11 @@ import { useFocusEffect } from '@react-navigation/native';
 import { View } from 'react-native';
 import Titel from "./assets/Titel";
 import styles from './assets/globalStyels';
+import { Circle, LinearGradient, useFont, vec,} from "@shopify/react-native-skia";
+import { useDerivedValue, type SharedValue } from "react-native-reanimated";
+import { Area, CartesianChart, Line, useChartPressState } from "victory-native";
+
+import { Text as SKText } from "@shopify/react-native-skia";
 
 
 //const today_value_address = ("http://plantpi:8000/today/value")
@@ -14,10 +19,10 @@ const AnalyseScreen = () => {
 
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [value, setValue] = useState([]);
-    const [threshold, setThreshold] = useState([]);
-    const fetchValueData = () => fetchData(today_value_address, setValue);
-    const fetchThresholdData = () => fetchData(today_threshold_address, setThreshold);
+    const [valueData, setValueData] = useState([]);
+    const [thresholdData, setThresholdData] = useState([]);
+    const fetchValueData = () => fetchData(today_value_address, setValueData);
+    const fetchThresholdData = () => fetchData(today_threshold_address, setThresholdData);
 
     const fetchData = async (url, setter) => {
       try {
@@ -31,7 +36,7 @@ const AnalyseScreen = () => {
         // Nur Value und Zeit extrahieren
         const items = (received.messages ?? []).map(({ value, timestamp }) => ({
           value,
-          time: timestamp.split("T")[1].split(".")[0]
+          time: new Date(timestamp).getHours() + new Date(timestamp).getMinutes() / 60 + new Date(timestamp).getSeconds() / 3600, 
         }));
 
         setter(items);
@@ -67,16 +72,26 @@ const AnalyseScreen = () => {
     );
 
 
-  const formatTime = (iso) => {
-    const d = new Date(iso);
-    return d.getHours() + d.getMinutes() / 60;
-  };
-
-
   return (
     <View style={styles.container}>
       <Titel style={styles.titel}>Historie</Titel>
-
+      <View style={{ width: "80%", flex: 1, padding: 20, backgroundColor: "green", marginBottom: 100, marginTop: 100 }}>
+        <CartesianChart
+          data={valueData}
+          xKey={"time"}
+          yKeys={["value"]}
+          domainPadding={{ top: 30 }}
+        >
+          {({ points }) => (
+            <Line
+              points={points.value}
+              color={"black"}
+              strokeWidth={3}
+              animate={{ type: "timing", duration: 2000 }}
+            />
+          )}
+        </CartesianChart>
+      </View>
     </View>
   );
 };
