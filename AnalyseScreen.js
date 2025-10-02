@@ -75,7 +75,21 @@ const AnalyseScreen = () => {
   return (
     <View style={styles.container}>
       <Titel style={styles.titel}>Historie</Titel>
-      <View style={{ width: "80%", flex: 1, padding: 20, backgroundColor: "green", marginBottom: 100, marginTop: 100 }}>
+      <View 
+    style={{
+      width: "90%", 
+      height: 300, 
+      padding: 16, 
+      backgroundColor: "white", 
+      borderRadius: 12,
+      shadowColor: "#000",
+      shadowOpacity: 0.1,
+      shadowOffset: { width: 0, height: 2 },
+      shadowRadius: 4,
+      elevation: 3, // für Android
+      marginTop: 20,
+    }}
+      >
         <CartesianChart
           data={valueData}
           xKey={"time"}
