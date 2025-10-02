@@ -3,10 +3,8 @@ import { useFocusEffect } from '@react-navigation/native';
 import { View } from 'react-native';
 import Titel from "./assets/Titel";
 import styles from './assets/globalStyels';
-import { Circle, LinearGradient, useFont, vec,} from "@shopify/react-native-skia";
-import { useDerivedValue, type SharedValue } from "react-native-reanimated";
-import { Area, CartesianChart, Line, useChartPressState } from "victory-native";
-import { Text as SKText } from "@shopify/react-native-skia";
+import {LinearGradient, useFont, vec,} from "@shopify/react-native-skia";
+import { Area, CartesianChart, Line} from "victory-native";
 import Colors from './assets/colors';
 
 //const today_value_address = ("http://plantpi:8000/today/value")
@@ -58,6 +56,13 @@ const AnalyseScreen = () => {
       fetchValueData();
       fetchThresholdData();
     };
+
+    const combinedData = valueData.map((v, i) => ({
+      time: v.time,
+      value: v.value,
+      threshold: thresholdData[i]?.value ?? null,
+    }));
+
   
     useEffect(() => {
       // Intervall für wiederholten Datenabruf
@@ -96,9 +101,9 @@ const AnalyseScreen = () => {
     }}
       >
         <CartesianChart
-          data={valueData}
+          data={combinedData}
           xKey={"time"}
-          yKeys={["value"]}
+          yKeys={["value", "threshold"]}
           domain={{ x: [0, 24] }}
           domainPadding={{ top: 30 }}
           axisOptions={{
@@ -112,14 +117,36 @@ const AnalyseScreen = () => {
             },
           }}
         >
-          {({ points }) => (
-            <Line
-              points={points.value}
-              color={"black"}
-              strokeWidth={2}
-              animate={{ type: "timing", duration: 2000 }}
-            />
-          )}
+          {({ points, chartBounds }) => {
+            return (
+              <>
+                <Line
+                  points={points.value}
+                  color={Colors.green}
+                  strokeWidth={2}
+                  animate={{ type: "timing", duration: 500 }}
+                />
+                <Area
+                  points={points.value}
+                  y0={chartBounds.bottom}
+                  animate={{ type: "timing", duration: 500 }}
+                >
+                  <LinearGradient
+                    start={vec(chartBounds.bottom, 200)}
+                    end={vec(chartBounds.bottom, chartBounds.bottom)}
+                    colors={[Colors.green + "80", Colors.green + "00"]}
+                  />
+                </Area>
+              
+                <Line
+                  points={points.threshold}
+                  color={Colors.dark}
+                  strokeWidth={2}
+                  animate={{ type: "timing", duration: 500 }}
+                />
+              </>
+            );
+          }}
         </CartesianChart>
       </View>
     </View>
