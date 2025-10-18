@@ -5,10 +5,10 @@ import styles from './assets/globalStyels';
 import { useFocusEffect } from '@react-navigation/native';
 import Colors from './assets/colors';
 
-//const value_address = ("http://plantpi:8000/now/value")
-//const threshold_address = ("http://plantpi:8000/now/threshold")
-const value_address = ("http://localhost:8000/now/value")
-const threshold_address = ("http://localhost:8000/now/threshold")
+const value_address = ("http://plantpi:8000/now/value")
+const threshold_address = ("http://plantpi:8000/now/threshold")
+//const value_address = ("http://localhost:8000/now/value")
+//const threshold_address = ("http://localhost:8000/now/threshold")
 
 const HEALTH05_IMAGE = require("./assets/healthbar/Health05.png");
 const HEALTH1_IMAGE = require("./assets/healthbar/Health1.png");

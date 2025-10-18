@@ -7,12 +7,14 @@ import {LinearGradient, useFont, vec,} from "@shopify/react-native-skia";
 import { Area, CartesianChart, Line} from "victory-native";
 import Colors from './assets/colors';
 
-//const today_value_address = ("http://plantpi:8000/today/value")
-//const today_threshold_address = ("http://plantpi:8000/today/threshold")
-const today_value_address = ("http://localhost:8000/today/value")
-const today_threshold_address = ("http://localhost:8000/today/threshold")
-const week_value_address = ("http://localhost:8000/week/value")
-const week_threshold_address = ("http://localhost:8000/week/threshold")
+const today_value_address = ("http://plantpi:8000/today/value")
+const today_threshold_address = ("http://plantpi:8000/today/threshold")
+const week_value_address = ("http://plantpi:8000/week/value")
+const week_threshold_address = ("http://plantpi:8000/week/threshold")
+//const today_value_address = ("http://localhost:8000/today/value")
+//const today_threshold_address = ("http://localhost:8000/today/threshold")
+//const week_value_address = ("http://localhost:8000/week/value")
+//const week_threshold_address = ("http://localhost:8000/week/threshold")
 
 const chartfont = require("./assets/fonts/Megrim-Regular.ttf");
 
